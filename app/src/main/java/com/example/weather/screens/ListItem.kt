@@ -16,11 +16,16 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.weather.models.Weather
 import com.example.weather.ui.theme.Blue50
+import com.example.weather.ui.theme.DayBtn
+import com.example.weather.ui.theme.TempColor
+import com.example.weather.ui.theme.Text_color
 
 
 @Composable
@@ -51,23 +56,29 @@ fun ListItem(weather: Weather, currentDay: MutableState<Weather>) {
                     bottom = 5.dp
                 )
             ) {
-                Text(text = weather.updatedTime)
+                Text(text = weather.updatedTime,
+                    color = DayBtn,
+                    fontFamily = FontFamily.Serif)
                 Text(
+                    modifier = Modifier.fillMaxWidth(0.37f),
                     text = weather.contitionText,
-                    color = Color.White
+                    color = Text_color,
+                    fontFamily = FontFamily.Serif,
+                    fontStyle = FontStyle.Italic
                 )
             }
             Text(
                 text = weather.tempCurrent.ifEmpty { "${weather.tempMin.toFloat().toInt()}℃/${weather.tempMax.toFloat().toInt()}℃" },
-                color = Color.White,
-                fontSize = 23.sp
+                color = TempColor,
+                fontSize = 19.sp,
+                fontFamily = FontFamily.Serif
             )
             AsyncImage(
                 model = "https:${weather.imageIcon }",
                 contentDescription = "image",
                 modifier = Modifier
                     .padding(end = 5.dp)
-                    .size(35.dp)
+                    .size(40.dp)
             )
         }
     }

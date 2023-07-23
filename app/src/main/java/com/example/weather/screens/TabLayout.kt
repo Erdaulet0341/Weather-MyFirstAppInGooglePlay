@@ -1,5 +1,7 @@
 package com.example.weather.screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,9 +15,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.example.weather.models.Weather
 import com.example.weather.ui.theme.Blue50
+import com.example.weather.ui.theme.Text_color
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
@@ -23,6 +27,9 @@ import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -45,7 +52,7 @@ fun TabLayout(listDays: MutableState<List<Weather>>, currentDay: MutableState<We
                     Modifier.pagerTabIndicatorOffset(pagerState, pos)
                 )
             },
-            contentColor = Color.White,
+            contentColor = Text_color,
             backgroundColor = Blue50,
         ) {
             tapList.forEachIndexed { index, name ->
@@ -57,7 +64,9 @@ fun TabLayout(listDays: MutableState<List<Weather>>, currentDay: MutableState<We
                         }
                     },
                     text = {
-                        Text(text = name, color = Color.White)
+                        Text(text = name,
+                            color = Text_color,
+                            fontFamily = FontFamily.Serif)
                     },
 
                     )
@@ -76,6 +85,7 @@ fun TabLayout(listDays: MutableState<List<Weather>>, currentDay: MutableState<We
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 private fun byHours(hours: String):List<Weather>{
     if(hours.isNullOrEmpty()) return listOf()
     val list = ArrayList<Weather>()
@@ -83,13 +93,21 @@ private fun byHours(hours: String):List<Weather>{
 
     for(i in 0 until jsonArray.length()){
         val item = jsonArray[i] as JSONObject
+        val timeString = item.getString("time")
+
+        val originalFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        val originalDateTime = LocalDateTime.parse(timeString, originalFormat)
+        val outputFormat = DateTimeFormatter.ofPattern("d MMMM HH:mm", Locale.ENGLISH)
+        val formattedDateTime = originalDateTime.format(outputFormat)
+
         list.add(
             Weather(
                 "",
-                item.getString("time"),
+                formattedDateTime,
                 item.getString("temp_c").toFloat().toInt().toString() + "℃",
                 item.getJSONObject("condition").getString("text"),
                 item.getJSONObject("condition").getString("icon"),
+                "",
                 "",
                 "",
                 ""

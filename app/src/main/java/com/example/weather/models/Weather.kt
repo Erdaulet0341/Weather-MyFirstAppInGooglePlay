@@ -9,5 +9,5 @@ data class Weather(
     val tempMin:String,
     val tempMax:String,
     val hoursWeather:String,
-
+    val averageTemp:String,
     )
