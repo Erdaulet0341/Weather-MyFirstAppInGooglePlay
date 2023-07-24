@@ -2,10 +2,10 @@ package com.example.weather.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple40 = Color(0xFF686B7A)
+val Purple40 = Color(0xFF295896)
 val PurpleGrey40 = Color(0xFF625b71)
+val bgg = Color(0xFF295896)
 
-val Bg_color = Color(0xFF686B7A)
 val DayBtn = Color(0xFFFF6A3D)
 val TempColor = Color(0xFFFFFFFF)
 val Blue50 = Color(0xCC1A2238)

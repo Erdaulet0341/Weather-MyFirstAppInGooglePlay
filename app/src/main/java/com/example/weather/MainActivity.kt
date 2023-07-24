@@ -34,6 +34,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -59,7 +61,7 @@ class MainActivity : ComponentActivity() {
                 locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+//                    color = MaterialTheme.colorScheme.background
                 ) {
                     val listDays = remember {
                         mutableStateOf(listOf<Weather>())
@@ -174,6 +176,19 @@ private fun isGPS(context: Context): Boolean {
     return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 }
 
+private fun isNetwork(context: Context): Boolean {
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkInfo = connectivityManager.activeNetworkInfo
+    if (networkInfo != null && networkInfo.isConnectedOrConnecting) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            return networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+        }
+        return true
+    }
+    return false
+}
+
 private fun isPermissionGranted(name: String, context: Context): Boolean {
     return ContextCompat
         .checkSelfPermission(context, name) ==
@@ -271,8 +286,14 @@ fun PermissionAwareScreen(
         Toast.makeText(context, "Please turn on your Location, and try again", Toast.LENGTH_SHORT).show()
     }
 
+    if(!isNetwork(context)){
+        isLoading.value = false
+        Toast.makeText(context, "Please turn on your Internet connection, and try again", Toast.LENGTH_SHORT).show()
+    }
+
     if(!isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION,context)){
         getResult("Almaty", context, listDays, currentDay, isLoading)
+        Toast.makeText(context, "Please give location permission", Toast.LENGTH_SHORT).show()
     }
 
 }
@@ -300,7 +321,7 @@ private fun getResult(
             currentDay.value = list[0]
         },
         { error ->
-            Toast.makeText(context, "Undefined error, please try again!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Please turn on your Internet connection, and try again", Toast.LENGTH_SHORT).show()
             isLoading.value = false
         }
     )
