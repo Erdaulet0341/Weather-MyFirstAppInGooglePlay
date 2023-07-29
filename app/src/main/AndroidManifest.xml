@@ -18,9 +18,8 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".SplashScreen"
+            android:name="com.yera.SplashScreen"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.Weather"
             android:screenOrientation="portrait">
 
@@ -31,9 +30,8 @@
 
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.yera.MainActivity"
             android:exported="false"
-            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Weather">
         </activity>
