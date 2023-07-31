@@ -3,5 +3,4 @@
 [Link](https://play.google.com/store/apps/details?id=com.yera) to the app in Google Play.
 
 
-
-![image](https://github.com/Erdaulet0341/WeatherApp/assets/98634106/4794b7ae-8af7-4fc0-b9ba-b4247f5bcebc)
+![two](https://github.com/Erdaulet0341/Weather-MyFirstAppInGooglePlay/assets/98634106/aeaa395c-f2c9-4014-a8a5-1c12b35f9851)
